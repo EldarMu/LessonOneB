@@ -28,6 +28,7 @@ public class ItemAdapter extends BaseAdapter {
         context = c;
 
         layoutInflater = LayoutInflater.from(context);
+        dates = new Vector<SpecialDate>();
         loadDates();
     }
 
@@ -82,12 +83,14 @@ public class ItemAdapter extends BaseAdapter {
         }
     }
 
-    public void loadDates(){
-        try{
+    public void loadDates() {
+        try {
+            Log.d(LOG_TAG, "Loading the dates.");
             FileInputStream is = context.openFileInput(dataFileName);
             setDates(SpecialDate.readDatesList(is));
             is.close();
-        } catch (Exception e){
+        } catch (Exception e) {
+            Log.d(LOG_TAG, "Loading the dates.... oops!");
             e.printStackTrace();
         }
     }

@@ -1,5 +1,7 @@
 package com.eldar.lessononeb;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -12,9 +14,9 @@ import android.widget.ListView;
 
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.nio.charset.StandardCharsets;
 
 import android.os.Handler;
 import android.widget.Toast;
@@ -59,6 +61,7 @@ public class DatesList extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.dates_list, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         // Handle action bar clicks here. The action bar will
@@ -72,11 +75,14 @@ public class DatesList extends ActionBarActivity {
         if (id == R.id.action_add_date) {
             Toast.makeText(this, "Adding a date...", Toast.LENGTH_LONG).show();
             final String hardcodedValue = "G:2010/09/27 09:00:00\nZ:2012/10/01 10:00:00\n";
-            InputStream stream =
-                    new ByteArrayInputStream(
-                            hardcodedValue.getBytes(StandardCharsets.UTF_8));
-            itemAdapter.setDates(SpecialDate.readDatesList(stream));
-            itemAdapter.saveDates();
+            try {
+              InputStream stream = new ByteArrayInputStream(
+                        hardcodedValue.getBytes("UTF-8"));
+              itemAdapter.setDates(SpecialDate.readDatesList(stream));
+              itemAdapter.saveDates();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             return true;
         }
             return super.onOptionsItemSelected(item);
