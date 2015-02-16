@@ -129,8 +129,8 @@ class SpecialDate {
         } else {
             shift = -shift;
         }
-        String yearsString = years == 0 ? "" : String.format("%d years", years);
-        return yearsString + ", " + formatShift(shift);
+        String yearsString = years == 0 ? "" : String.format("%d years, ", years);
+        return yearsString + formatShift(shift);
     }
 
     /**

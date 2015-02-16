@@ -1,6 +1,7 @@
 package com.eldar.lessononeb;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -74,15 +75,8 @@ public class DatesList extends ActionBarActivity {
         }
         if (id == R.id.action_add_date) {
             Toast.makeText(this, "Adding a date...", Toast.LENGTH_LONG).show();
-            final String hardcodedValue = "G:2010/09/27 09:00:00\nZ:2012/10/01 10:00:00\n";
-            try {
-              InputStream stream = new ByteArrayInputStream(
-                        hardcodedValue.getBytes("UTF-8"));
-              itemAdapter.setDates(SpecialDate.readDatesList(stream));
-              itemAdapter.saveDates();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            Intent intent = new Intent(DatesList.this, EnterDate.class);
+            startActivity(intent);
             return true;
         }
             return super.onOptionsItemSelected(item);
@@ -92,6 +86,7 @@ public class DatesList extends ActionBarActivity {
     protected void onResume(){
         super.onResume();
         timer = new Timer();
+        itemAdapter.loadDates();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {

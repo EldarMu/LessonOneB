@@ -14,7 +14,7 @@ import android.widget.TimePicker;
 public class EnterDate extends ActionBarActivity {
     private DatePicker datePicker;
     private TimePicker timePicker;
-    private TextView textView;
+    private TextView textLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +23,17 @@ public class EnterDate extends ActionBarActivity {
         final Button button = (Button)findViewById(R.id.doTheStuffButton);
         button.setOnClickListener(new View.OnClickListener(){
                                       public void onClick (View v){
-                                          //perform action on click
-                                          textView.setText(String.format("%04d-%02d-%02d %02d:%02d",datePicker.getYear(),datePicker.getMonth()+1,
-                                          datePicker.getDayOfMonth(),timePicker.getCurrentHour(), timePicker.getCurrentMinute()));
-                                      }
+                //perform action on click
+                String dateString = String.format("%04d/%02d/%02d %02d:%02d:00",
+                       datePicker.getYear(), datePicker.getMonth() + 1,
+                       datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
+                       timePicker.getCurrentMinute());
+                SpecialDate date = new SpecialDate(textLabel.getText().toString(), dateString);
+                       ItemAdapter adapter = new ItemAdapter(EnterDate.this);
+                       adapter.addDate(date);
+                finish();    }
                                   });
-        textView = (TextView)findViewById(R.id.dateString); //test
+        textLabel = (TextView)findViewById(R.id.dateString); //test
         timePicker = (TimePicker)findViewById(R.id.timePicker);
         datePicker = (DatePicker)findViewById(R.id.datePicker);
     }

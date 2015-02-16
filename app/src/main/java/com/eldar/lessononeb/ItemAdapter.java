@@ -29,7 +29,12 @@ public class ItemAdapter extends BaseAdapter {
 
         layoutInflater = LayoutInflater.from(context);
         dates = new Vector<SpecialDate>();
+    }
+
+    public void addDate(SpecialDate date){
         loadDates();
+        dates.add(date);
+        saveDates();
     }
 
     public void setDates(Vector<SpecialDate> dates){
