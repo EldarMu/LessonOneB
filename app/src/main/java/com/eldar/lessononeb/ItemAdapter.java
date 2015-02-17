@@ -3,11 +3,13 @@ package com.eldar.lessononeb;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -75,6 +77,22 @@ public class ItemAdapter extends BaseAdapter {
         textView.setText(String.format(dates.elementAt(i).getLabel() + " : " + dates.elementAt(i).toString()));
         textView = (TextView)itemView.findViewById(R.id.textValue);
         textView.setText(dates.elementAt(i).timeSince());
+        itemView.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent){
+                switch(motionEvent.getAction()){
+                    case MotionEvent.ACTION_DOWN: //Touch item
+                        TextView textView = (TextView)view.findViewById(R.id.textLabel);
+                        Toast.makeText(context, "Touched the view..." + textView.getText(),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case MotionEvent.ACTION_MOVE: //do nothing while finger moving on item
+                    case MotionEvent.ACTION_UP: //do nothing if finger lifted off item
+                        break;
+                }
+                return false;
+            }
+        });
         return itemView;
     }
     public void saveDates(){
