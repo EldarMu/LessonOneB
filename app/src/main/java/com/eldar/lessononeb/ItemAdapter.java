@@ -1,6 +1,9 @@
 package com.eldar.lessononeb;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.drm.DrmStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -64,7 +67,7 @@ public class ItemAdapter extends BaseAdapter {
     @Override
 
     public View getView(int i, View view, ViewGroup parent) {
-        Log.d(LOG_TAG, String.format("getView() for item %d", i));
+        //Log.d(LOG_TAG, String.format("getView() for item %d", i));
         LinearLayout itemView;
         if (view == null) { // Create a new view if no recycled view is available
                     itemView = (LinearLayout) layoutInflater.inflate(
@@ -74,17 +77,37 @@ public class ItemAdapter extends BaseAdapter {
             itemView = (LinearLayout) view;
         }
         TextView textView = (TextView)itemView.findViewById(R.id.textLabel);
-        textView.setText(String.format(dates.elementAt(i).getLabel() + " : " + dates.elementAt(i).toString()));
+        textView.setText(String.format(dates.elementAt(i).getLabel()));
+
+        textView = (TextView)itemView.findViewById(R.id.textDate);
+        textView.setText(dates.elementAt(i).toString());
+
         textView = (TextView)itemView.findViewById(R.id.textValue);
         textView.setText(dates.elementAt(i).timeSince());
+
         itemView.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent){
                 switch(motionEvent.getAction()){
                     case MotionEvent.ACTION_DOWN: //Touch item
                         TextView textView = (TextView)view.findViewById(R.id.textLabel);
-                        Toast.makeText(context, "Touched the view..." + textView.getText(),
-                                Toast.LENGTH_LONG).show();
+                    new AlertDialog.Builder(context)
+                            .setTitle("Delete date?")
+                            .setMessage("'Yes' to delete " + textView.getText())
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                                public void onClick(DialogInterface dialog, int id){
+                                    Toast.makeText(context, "Deleting...", Toast.LENGTH_LONG)
+                                            .show();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener(){
+                                public void onClick(DialogInterface dialog, int id){
+                                    Toast.makeText(context, "Retaining", Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            })
+                            .create()
+                            .show();
                         break;
                     case MotionEvent.ACTION_MOVE: //do nothing while finger moving on item
                     case MotionEvent.ACTION_UP: //do nothing if finger lifted off item

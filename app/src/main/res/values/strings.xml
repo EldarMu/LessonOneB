@@ -9,5 +9,6 @@
     <string name="ItemSampleText">Item Sample Text</string>
     <string name="sample_text">Sample Text for %d</string>
     <string name="add_date">Add a date</string>
+    <string name="textSeparator">: </string>
 
 </resources>
