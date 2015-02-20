@@ -37,9 +37,34 @@ public class ItemAdapter extends BaseAdapter {
     }
 
     public void addDate(SpecialDate date){
-        loadDates();
         dates.add(date);
-        saveDates();
+    }
+
+    public void deleteDate(String label){
+        Log.d(LOG_TAG, "passing label: " + label);
+        Vector<SpecialDate> newDates = new Vector<SpecialDate>();
+            for (SpecialDate date : dates){
+                if (!label.equals(date.getLabel())){
+                    Log.d(LOG_TAG, "label received: " + date.getLabel());
+                    newDates.add(date);
+                }
+            }
+        setDates(newDates); //setDates notifies data set changed (tells the UI)
+    }
+
+    class ItemDeleter implements DialogInterface.OnClickListener{
+
+        String label;
+        public ItemDeleter(String label){
+        this.label = label;
+        }
+        public void onClick(DialogInterface dialog, int id) {
+            Toast.makeText(context, "Deleting...", Toast.LENGTH_LONG)
+                    .show();
+            deleteDate(label);
+            saveDates();
+        }
+
     }
 
     public void setDates(Vector<SpecialDate> dates){
@@ -94,14 +119,10 @@ public class ItemAdapter extends BaseAdapter {
                     new AlertDialog.Builder(context)
                             .setTitle("Delete date?")
                             .setMessage("'Yes' to delete " + textView.getText())
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
-                                public void onClick(DialogInterface dialog, int id){
-                                    Toast.makeText(context, "Deleting...", Toast.LENGTH_LONG)
-                                            .show();
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener(){
-                                public void onClick(DialogInterface dialog, int id){
+                            .setPositiveButton("Yes",
+                                    new ItemDeleter(textView.getText().toString()))
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
                                     Toast.makeText(context, "Retaining", Toast.LENGTH_SHORT)
                                             .show();
                                 }

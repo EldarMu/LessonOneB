@@ -30,7 +30,9 @@ public class EnterDate extends ActionBarActivity {
                        timePicker.getCurrentMinute());
                 SpecialDate date = new SpecialDate(textLabel.getText().toString(), dateString);
                        ItemAdapter adapter = new ItemAdapter(EnterDate.this);
+                       adapter.loadDates();
                        adapter.addDate(date);
+                       adapter.saveDates();
                 finish();    }
                                   });
         textLabel = (TextView)findViewById(R.id.dateString); //test
