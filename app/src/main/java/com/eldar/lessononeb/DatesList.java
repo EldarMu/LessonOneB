@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
@@ -29,7 +29,7 @@ public class DatesList extends ActionBarActivity {
     private Timer timer;
     private final Handler timeHandler = new Handler();
 
-    //Fragment that displays the meme.
+    //Fragment that displays the date item.
     public static class DatesListFragment extends Fragment {
 
         @Override
@@ -51,9 +51,9 @@ public class DatesList extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dates_list);
-        ListView listView = (ListView)findViewById(R.id.listView);
+        GridView gridView = (GridView)findViewById(R.id.listView);
         itemAdapter = new ItemAdapter(this);
-        listView.setAdapter(itemAdapter);
+        gridView.setAdapter(itemAdapter);
     }
 
     @Override
@@ -69,9 +69,10 @@ public class DatesList extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings)
+        if (id == R.id.action_help)
         {
-            return true;
+          Toast.makeText(this, "Touch and hold a date for delete prompt", Toast.LENGTH_LONG).show();
+          return true;
         }
         if (id == R.id.action_add_date) {
             Toast.makeText(this, "Adding a date...", Toast.LENGTH_LONG).show();

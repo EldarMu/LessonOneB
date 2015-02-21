@@ -3,7 +3,6 @@ package com.eldar.lessononeb;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.drm.DrmStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -41,11 +40,9 @@ public class ItemAdapter extends BaseAdapter {
     }
 
     public void deleteDate(String label){
-        Log.d(LOG_TAG, "passing label: " + label);
         Vector<SpecialDate> newDates = new Vector<SpecialDate>();
             for (SpecialDate date : dates){
                 if (!label.equals(date.getLabel())){
-                    Log.d(LOG_TAG, "label received: " + date.getLabel());
                     newDates.add(date);
                 }
             }
@@ -53,13 +50,12 @@ public class ItemAdapter extends BaseAdapter {
     }
 
     class ItemDeleter implements DialogInterface.OnClickListener{
-
         String label;
         public ItemDeleter(String label){
         this.label = label;
         }
         public void onClick(DialogInterface dialog, int id) {
-            Toast.makeText(context, "Deleting...", Toast.LENGTH_LONG)
+            Toast.makeText(context, "Deleting...", Toast.LENGTH_SHORT)
                     .show();
             deleteDate(label);
             saveDates();
@@ -110,30 +106,22 @@ public class ItemAdapter extends BaseAdapter {
         textView = (TextView)itemView.findViewById(R.id.textValue);
         textView.setText(dates.elementAt(i).timeSince());
 
-        itemView.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent){
-                switch(motionEvent.getAction()){
-                    case MotionEvent.ACTION_DOWN: //Touch item
+        itemView.setOnLongClickListener(new View.OnLongClickListener(){
+            public boolean onLongClick(View view){
                         TextView textView = (TextView)view.findViewById(R.id.textLabel);
                     new AlertDialog.Builder(context)
                             .setTitle("Delete date?")
                             .setMessage("'Yes' to delete " + textView.getText())
-                            .setPositiveButton("Yes",
-                                    new ItemDeleter(textView.getText().toString()))
                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     Toast.makeText(context, "Retaining", Toast.LENGTH_SHORT)
                                             .show();
                                 }
                             })
+                            .setPositiveButton("Yes",
+                                    new ItemDeleter(textView.getText().toString()))
                             .create()
                             .show();
-                        break;
-                    case MotionEvent.ACTION_MOVE: //do nothing while finger moving on item
-                    case MotionEvent.ACTION_UP: //do nothing if finger lifted off item
-                        break;
-                }
                 return false;
             }
         });

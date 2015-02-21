@@ -1,5 +1,6 @@
 package com.eldar.lessononeb;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,12 +10,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 
 public class EnterDate extends ActionBarActivity {
     private DatePicker datePicker;
     private TimePicker timePicker;
     private TextView textLabel;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,13 @@ public class EnterDate extends ActionBarActivity {
         button.setOnClickListener(new View.OnClickListener(){
                                       public void onClick (View v){
                 //perform action on click
+                String label = textLabel.getText().toString();
+                if (label.length() == 0) {
+                    Toast.makeText(context, "Please provide a name for the date",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 String dateString = String.format("%04d/%02d/%02d %02d:%02d:00",
                        datePicker.getYear(), datePicker.getMonth() + 1,
                        datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
